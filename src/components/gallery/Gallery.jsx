@@ -44,7 +44,8 @@ export const Gallery = () => {
                     галерея
                 </h2>
 
-                <div className="gallery-nav items-center flex justify-center md:justify-between pb-11 gap-6 flex-wrap relative">
+                <div
+                    className="gallery-nav items-center flex justify-center md:justify-between pb-11 gap-6 flex-wrap relative">
                     {/* КНОПКА + DROPDOWN */}
                     <div className="relative">
                         <button
@@ -55,7 +56,8 @@ export const Gallery = () => {
                         </button>
 
                         {isDropdownOpen && (
-                            <div className="absolute left-0 mt-2 bg-white border rounded-lg shadow-lg z-50 min-w-[200px] max-h-60 overflow-y-auto">
+                            <div
+                                className="absolute left-0 mt-2 bg-white border rounded-lg shadow-lg z-50 min-w-[200px] max-h-60 overflow-y-auto">
                                 {categories.map(cat => (
                                     <button
                                         key={cat.id}
@@ -83,14 +85,16 @@ export const Gallery = () => {
                     </form>
 
                     {/* НАВИГАЦИЯ */}
-                    <div className="gallery-nav max-w-32 flex gap-3 lg:gap-8">
-                        <button className="my-prev-button-sliders cursor-pointer">
-                            <img src={left} alt="prev" />
+                    <div className="gallery-nav flex gap-3 lg:gap-8 items-center">
+                        <button type="button" className="swiper-button-prev-custom">
+                            <img src={left} alt="prev" className="w-8 h-8 sm:w-10 sm:h-10"/>
                         </button>
-                        <button className="my-next-button-sliders cursor-pointer">
-                            <img src={right} alt="next" />
+                        <button type="button" className="swiper-button-next-custom">
+                            <img src={right} alt="next" className="w-8 h-8 sm:w-10 sm:h-10"/>
                         </button>
                     </div>
+
+
                 </div>
 
                 {/* SWIPER */}
@@ -102,18 +106,19 @@ export const Gallery = () => {
                     <Swiper
                         modules={[Navigation, A11y]}
                         spaceBetween={20}
+                        navigation={{
+                            nextEl: '.swiper-button-next-custom',
+                            prevEl: '.swiper-button-prev-custom',
+                        }}
                         breakpoints={{
                             0: { slidesPerView: 2 },
                             640: { slidesPerView: 3 },
                             1024: { slidesPerView: 3 },
                             1280: { slidesPerView: 4 },
                         }}
-                        navigation={{
-                            nextEl: '.my-next-button-sliders',
-                            prevEl: '.my-prev-button-sliders',
-                        }}
                     >
-                        {items.map(item => (
+
+                    {items.map(item => (
                             <SwiperSlide key={item.id} onClick={() => handleSlideClick(item.id)}>
                                 <img
                                     src={

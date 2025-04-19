@@ -14,11 +14,25 @@ export const fetchNews = createAsyncThunk(
     }
 );
 
+export const fetchNewsById = createAsyncThunk(
+    'news/fetchNewsById',
+    async (id, { rejectWithValue }) => {
+        try {
+            const response = await newsService.getById(id);
+            return response.data;
+        } catch (error) {
+            return rejectWithValue(error.response?.data?.message || 'Ошибка загрузки новости');
+        }
+    }
+);
+
+
 // Слайс новостей
 const newsSlice = createSlice({
     name: 'news',
     initialState: {
         news: [],
+        selectedNews: null,
         loading: false,
         error: null,
     },
@@ -38,7 +52,19 @@ const newsSlice = createSlice({
             .addCase(fetchNews.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload;
-            });
+            })
+            .addCase(fetchNewsById.pending, state => {
+                state.loading = true;
+                state.error = null;
+            })
+            .addCase(fetchNewsById.fulfilled, (state, action) => {
+                state.loading = false;
+                state.selectedNews = action.payload;
+            })
+            .addCase(fetchNewsById.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.payload;
+            })
     },
 });
 

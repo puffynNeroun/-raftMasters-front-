@@ -21,7 +21,7 @@ export const Header = () => {
                         </li>
                         <li>
                             <Link
-                                to="/"
+                                to="/gallery"
                                 className="font-semibold xl:text-2xl lg:text-xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300"
                             >
                                 Изделия
@@ -29,7 +29,7 @@ export const Header = () => {
                         </li>
                         <li>
                             <Link
-                                to="/"
+                                to="/news"
                                 className="font-semibold xl:text-2xl lg:text-xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300"
                             >
                                 Новости

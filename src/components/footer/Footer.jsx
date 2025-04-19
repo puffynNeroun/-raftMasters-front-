@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 export const Footer = () => {
     return (
         <footer className="pb-6">
@@ -22,12 +24,41 @@ export const Footer = () => {
                 <div className="content-right">
                     <nav>
                         <ul className="gap-6 flex-col xl:flex hidden">
-                            <li><a className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300" href="#">Каталог мастеров</a></li>
-                            <li><a className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300" href="#">Изделия</a></li>
-                            <li><a className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300" href="#">Новости</a></li>
-                            <li><a className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300" href="#">Контакты</a></li>
+                            <li>
+                                <Link
+                                    to="/masters"
+                                    className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300"
+                                >
+                                    Каталог мастеров
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/gallery"
+                                    className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300"
+                                >
+                                    Изделия
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/news"
+                                    className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300"
+                                >
+                                    Новости
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    to="/contact"
+                                    className="font-semibold text-2xl text-gray-300 cursor-pointer hover:text-[#DAAB50] transition ease-in-out duration-300"
+                                >
+                                    Контакты
+                                </Link>
+                            </li>
                         </ul>
                     </nav>
+
                 </div>
             </div>
         </footer>
