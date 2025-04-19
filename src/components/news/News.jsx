@@ -1,42 +1,20 @@
-import { useState } from 'react';
-import img from '../../assets/img/Group 2.jpg';
+import { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchNews } from '../../store/slices/newsSlice';
+import { Link } from 'react-router-dom';
 
 export const News = () => {
-    const [activeTab, setActiveTab] = useState('masters');
+    const dispatch = useDispatch();
+    const { news, loading, error } = useSelector(state => state.news);
+    const [activeTab, setActiveTab] = useState('all');
 
-    const cardsData = {
-        masters: [
-            { id: 1, img, title: 'Мастер 1' },
-            { id: 2, img, title: 'Мастер 2' },
-            { id: 3, img, title: 'Мастер 3' },
-        ],
-        masterClasses: [
-            { id: 4, img, title: 'Мастер-класс 1' },
-            { id: 5, img, title: 'Мастер-класс 2' },
-        ],
-        contests: [
-            { id: 6, img, title: 'Конкурс 1' },
-            { id: 7, img, title: 'Конкурс 2' },
-            { id: 8, img, title: 'Конкурс 3' },
-            { id: 9, img, title: 'Конкурс 4' },
-        ],
-    };
+    useEffect(() => {
+        dispatch(fetchNews());
+    }, [dispatch]);
 
-    const renderCards = () => {
-        let cards = [];
-
-        if (activeTab === 'masters') cards = cardsData.masters;
-        else if (activeTab === 'masterClasses') cards = cardsData.masterClasses;
-        else if (activeTab === 'contests') cards = cardsData.contests;
-
-        return cards.map(card => (
-            <div key={card.id} className="card flex flex-col max-w-64 md:max-w-xl">
-                <img src={card.img} alt="img" />
-                <button className="pt-6 pb-6 pl-16 pr-16 text-center text-xl cursor-pointer font-semibold hover:text-[#1A1A1A] bg-[#DAAB50] transition ease-in-out duration-300 uppercase">
-                    Читать далее
-                </button>
-            </div>
-        ));
+    const filteredNews = () => {
+        if (activeTab === 'all') return news;
+        return news.filter(n => n.type === activeTab);
     };
 
     return (
@@ -46,29 +24,70 @@ export const News = () => {
                     Новости
                 </h2>
 
-                <div className="nav-group flex flex-col md:flex md:flex-row md:flex-wrap gap-6 md:gap-16 items-center justify-center mb-16">
-                    <button
-                        onClick={() => setActiveTab('masters')}
-                        className="pt-6 pb-6 pl-16 pr-16 text-xl cursor-pointer text-[#DAAB50] border-2 border-[#DAAB50] border-solid box-border font-semibold hover:text-[#1A1A1A] hover:bg-[#DAAB50] transition ease-in-out duration-300 uppercase"
-                    >
-                        Мастера
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('masterClasses')}
-                        className="pt-6 pb-6 pl-16 pr-16 text-xl cursor-pointer text-[#DAAB50] border-2 border-[#DAAB50] border-solid box-border font-semibold hover:text-[#1A1A1A] hover:bg-[#DAAB50] transition ease-in-out duration-300 uppercase"
-                    >
-                        Мастер-классы
-                    </button>
-                    <button
-                        onClick={() => setActiveTab('contests')}
-                        className="pt-6 pb-6 pl-16 pr-16 text-xl cursor-pointer text-[#DAAB50] border-2 border-[#DAAB50] border-solid box-border font-semibold hover:text-[#1A1A1A] hover:bg-[#DAAB50] transition ease-in-out duration-300 uppercase"
-                    >
-                        Конкурсы
-                    </button>
+                {/* Tabs */}
+                <div className="nav-group flex flex-wrap gap-6 items-center justify-center mb-16">
+                    {[
+                        { key: 'all', label: 'Все' },
+                        { key: 'master', label: 'Мастера' },
+                        { key: 'master-class', label: 'Мастер-классы' },
+                        { key: 'contest', label: 'Конкурсы' }
+                    ].map(tab => (
+                        <button
+                            key={tab.key}
+                            onClick={() => setActiveTab(tab.key)}
+                            className={`pt-4 pb-4 px-10 text-xl font-semibold border-2 uppercase transition ${
+                                activeTab === tab.key
+                                    ? 'bg-[#DAAB50] text-black'
+                                    : 'text-[#DAAB50] border-[#DAAB50]'
+                            }`}
+                        >
+                            {tab.label}
+                        </button>
+                    ))}
                 </div>
 
-                <div className="carts-group flex items-center justify-center flex-wrap gap-5">
-                    {renderCards()}
+                {/* News List */}
+                <div className="flex items-center justify-center flex-wrap gap-6">
+                    {loading ? (
+                        <p className="text-white text-xl">Загрузка...</p>
+                    ) : error ? (
+                        <p className="text-red-500 text-xl">{error}</p>
+                    ) : filteredNews().length === 0 ? (
+                        <p className="text-white text-xl">Новостей не найдено</p>
+                    ) : (
+                        filteredNews().map(item => (
+                            <div
+                                key={item.id}
+                                className="flex flex-col max-w-[300px] w-full shadow-lg rounded overflow-hidden bg-white h-[450px]" // ← фиксированная высота
+                            >
+                                <img
+                                    src={
+                                        item.image
+                                            ? `http://localhost:5000${item.image}`
+                                            : 'https://via.placeholder.com/300x200?text=News'
+                                    }
+                                    alt={item.title}
+                                    className="w-full h-[200px] object-cover"
+                                />
+                                <div className="p-4 text-black flex flex-col gap-2 flex-grow">
+                                    <h3 className="font-bold text-lg line-clamp-2">{item.title}</h3>
+                                    <p className="text-sm line-clamp-3">{item.content}</p>
+                                    <p className="text-xs text-gray-500 mt-auto">
+                                        {new Date(item.publishedDate).toLocaleDateString()}
+                                    </p>
+                                </div>
+                                <div className="bg-[#DAAB50] text-black p-4 flex justify-center">
+                                    <Link
+                                        to={`/news/${item.id}`}
+                                        className="text-xl font-semibold uppercase"
+                                    >
+                                        Читать далее
+                                    </Link>
+                                </div>
+                            </div>
+
+                        ))
+                    )}
                 </div>
             </div>
         </section>

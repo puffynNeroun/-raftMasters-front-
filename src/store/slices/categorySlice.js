@@ -50,4 +50,7 @@ const categorySlice = createSlice({
     },
 })
 
-export default categorySlice.reducer
+// ✅ Селектор
+export const selectCategories = (state) => state.category.categories;
+
+export default categorySlice.reducer;

@@ -12,6 +12,7 @@ import user from '../../assets/img/users.jpg'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
+import {MasterCard} from "./MasterCard.jsx";
 
 export const Masters = () => {
     const dispatch = useAppDispatch()
@@ -76,47 +77,7 @@ export const Masters = () => {
                     >
                         {masters.map((master) => (
                             <SwiperSlide key={master.id}>
-                                <div className="card bg-white overflow-hidden shadow-lg flex flex-col h-full">
-                                    <div className="bg-gray-100 flex justify-center items-center p-6">
-                                        <img
-                                            src={master.photo || user}
-                                            alt={master.fullName}
-                                            className="w-40 h-40 object-cover"
-                                        />
-                                    </div>
-
-                                    <div className="bg-[#DAAB50] p-4 flex flex-col flex-grow">
-                                        <div className="flex flex-col sm:flex-row sm:justify-between gap-4">
-                                            <div className="flex flex-col">
-                                                <p className="text-xl font-bold">{master.fullName}</p>
-                                                <p className="text-sm text-gray-800">{master.contactEmail}</p>
-                                                <div className="flex gap-2 mt-2">
-                                                    {master.socialLinks?.split(',').map((link, idx) => (
-                                                        <a
-                                                            key={idx}
-                                                            href={link.trim()}
-                                                            target="_blank"
-                                                            rel="noopener noreferrer"
-                                                        >
-                                                            <div className="w-4 h-4 bg-black rounded-full" />
-                                                        </a>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <p className="text-sm max-w-[200px]">{master.shortDescription}</p>
-                                        </div>
-
-                                        <div className="flex items-center justify-between mt-4">
-                                            <button className="bg-black text-white px-4 py-2 uppercase text-sm hover:opacity-80">
-                                                Подробнее
-                                            </button>
-                                            <div className="flex gap-4 text-black font-semibold text-sm uppercase">
-                                                <span>{master.category?.name}</span>
-                                                <span>{master.region?.name}</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <MasterCard master={master} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
