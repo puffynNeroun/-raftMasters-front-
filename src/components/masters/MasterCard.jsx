@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import userPlaceholder from '../../assets/img/users.jpg'
 
-export const MasterCard = ({ master }) => {
+export const MasterCard = ({ master, onOpen  }) => {
     return (
         <div className="card bg-white overflow-hidden shadow-lg flex flex-col h-[500px]">
             {/* БОЛЬШАЯ КАРТИНКА */}
@@ -38,7 +38,10 @@ export const MasterCard = ({ master }) => {
                 </div>
 
                 <div className="flex items-center justify-between">
-                    <button className="bg-black text-white px-3 py-1.5 uppercase text-xs hover:opacity-80">
+                    <button
+                        className="bg-black text-white px-3 py-1.5 uppercase text-xs hover:opacity-80"
+                        onClick={() => onOpen(master.id)}
+                    >
                         Подробнее
                     </button>
                     <div className="flex gap-3 text-black font-semibold text-xs uppercase">
@@ -65,5 +68,7 @@ MasterCard.propTypes = {
         region: PropTypes.shape({
             name: PropTypes.string
         }),
+        onOpen: PropTypes.func.isRequired,
+
     }).isRequired,
 }

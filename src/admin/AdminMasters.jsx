@@ -87,6 +87,12 @@ const AdminMasters = () => {
                     </div>
                 ))}
             </div>
+            <button
+                onClick={() => navigate('/admin/masters/create')}
+                className="mb-6 px-6 py-3 bg-[#DAAB50] text-white font-semibold rounded hover:bg-[#c7993e]"
+            >
+                + Добавить мастера
+            </button>
         </section>
     );
 };

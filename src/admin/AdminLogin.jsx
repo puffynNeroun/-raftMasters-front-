@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { adminLogin, isAdmin } from '../services/adminService';
 
@@ -11,17 +11,18 @@ const AdminLogin = () => {
         e.preventDefault();
         const success = adminLogin(password);
         if (success) {
-            navigate('/admin/dashboard'); // Перенаправляем в админку
+            navigate('/admin/dashboard');
         } else {
             setError('Неверный пароль администратора');
         }
     };
 
-    // Если уже авторизован — редирект
-    if (isAdmin()) {
-        navigate('/admin/dashboard');
-        return null;
-    }
+    // ✅ Выполняем редирект через useEffect
+    useEffect(() => {
+        if (isAdmin()) {
+            navigate('/admin/dashboard');
+        }
+    }, [navigate]);
 
     return (
         <section className="min-h-screen flex justify-center items-center bg-[#1A1A4B] px-4">

@@ -17,6 +17,7 @@ import AdminNews from "./admin/AdminNews.jsx";
 import AdminItems from "./admin/AdminItems.jsx";
 import AdminItemCreate from "./admin/AdminItemCreate.jsx";
 import AdminMasters from "./admin/AdminMasters.jsx";
+import AdminMasterCreate from "./admin/AdminMasterCreate.jsx";
 
 // Главная страница как отдельный компонент (вместо App туда добавим Welcome и др.)
 const HomePage = () => (
@@ -107,8 +108,12 @@ export const router = createBrowserRouter([
                         <AdminMasters />
                     </PrivateAdminRoute>
                 )
-            }
+            },
 
+            {
+                path: '/admin/masters/create',
+                element: <AdminMasterCreate />
+            }
 
         ],
     },

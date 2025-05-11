@@ -1,22 +1,43 @@
-import { useEffect } from 'react'
+import {useEffect, useState} from 'react'
 import { useAppDispatch, useAppSelector } from '../../store/hooks.js'
-import { loadMasters } from '../../store/slices/masterSlice.js'
+import {
+    clearSelectedMaster,
+    loadMasterAchievements,
+    loadMasterById,
+    loadMasters
+} from '../../store/slices/masterSlice.js'
 
 import { Navigation, A11y } from 'swiper/modules'
 import { Swiper, SwiperSlide } from 'swiper/react'
 
 import leftBtn from '../../assets/img/navigationLeft.png'
 import rightBtn from '../../assets/img/navigationRight.png'
-import user from '../../assets/img/users.jpg'
 
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import {MasterCard} from "./MasterCard.jsx";
+import {ProfileModal} from "../modals/ProfileModal.jsx";
 
 export const Masters = () => {
     const dispatch = useAppDispatch()
-    const { masters, loading } = useAppSelector((state) => state.master)
+    const { masters, loading, selectedMaster, achievements } = useAppSelector((state) => state.master)
+
+    const [isModalOpen, setIsModalOpen] = useState(false)
+
+
+    const handleOpenModal = (id) => {
+        dispatch(loadMasterById(id))
+        dispatch(loadMasterAchievements(id))
+        setIsModalOpen(true)
+        document.body.style.overflow = 'hidden'
+    }
+
+    const handleCloseModal = () => {
+        dispatch(clearSelectedMaster())
+        setIsModalOpen(false)
+        document.body.style.overflow = ''
+    }
 
     useEffect(() => {
         dispatch(loadMasters())
@@ -77,10 +98,17 @@ export const Masters = () => {
                     >
                         {masters.map((master) => (
                             <SwiperSlide key={master.id}>
-                                <MasterCard master={master} />
+                                <MasterCard master={master} onOpen={handleOpenModal} />
                             </SwiperSlide>
                         ))}
                     </Swiper>
+                )}
+                {isModalOpen && selectedMaster && (
+                    <ProfileModal
+                        master={selectedMaster}
+                        achievements={achievements}
+                        onClose={handleCloseModal}
+                    />
                 )}
             </div>
         </section>

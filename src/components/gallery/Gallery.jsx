@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchItems, fetchItemById } from '../../store/slices/itemSlice';
+import {fetchItems, fetchItemById, clearSelectedItem} from '../../store/slices/itemSlice';
 import { loadCategories } from '../../store/slices/categorySlice';
 import { Navigation, A11y } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -9,8 +9,12 @@ import 'swiper/css/navigation';
 
 import left from '../../assets/img/navigationLeft.png';
 import right from '../../assets/img/navigationRight.png';
+import {GalleryModal} from "../modals/GalleryModal.jsx";
 
 export const Gallery = () => {
+    const { selectedItem } = useSelector(state => state.items);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const dispatch = useDispatch();
     const { items, loading, error } = useSelector(state => state.items);
     const { categories } = useSelector(state => state.categories);
@@ -24,6 +28,8 @@ export const Gallery = () => {
         dispatch(fetchItems({ search, categoryId }));
     }, [dispatch, search, categoryId]);
 
+
+
     const handleSearchChange = (e) => {
         setSearch(e.target.value);
     };
@@ -34,8 +40,16 @@ export const Gallery = () => {
     };
 
     const handleSlideClick = (id) => {
-        dispatch(fetchItemById(id));
+        dispatch(fetchItemById(id)).then(() => {
+            setIsModalOpen(true);
+        });
     };
+    const handleCloseModal = () => {
+        dispatch(clearSelectedItem());
+        setIsModalOpen(false);
+    };
+
+
 
     return (
         <section className="gallery mt-16">
@@ -134,6 +148,10 @@ export const Gallery = () => {
                     </Swiper>
                 )}
             </div>
+            {isModalOpen && selectedItem && (
+                <GalleryModal item={selectedItem} onClose={handleCloseModal} />
+            )}
+
         </section>
     );
 };
